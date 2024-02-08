@@ -21,7 +21,7 @@ class Person(BaseModel):
     email: str
     interests: List[str]
 
-response = await convertanything(
+response = convertanything(
     input_string="Hi my name is John Doe, I am 30 years old, my email is johndoe@example.com . I like to go fishing.",
     model=Person,
     api_key="Your OpenAI API Key",

@@ -3,7 +3,7 @@ from typing import Type
 import json
 import openai
 
-async def convertanything(input_string: str, model: Type[BaseModel], api_key=None, server="https://api.openai.com", llm="gpt-3.5-turbo-16k"):
+def convertanything(input_string: str, model: Type[BaseModel], api_key=None, server="https://api.openai.com", llm="gpt-3.5-turbo-16k"):
     openai.base_url = f"{server}/v1/"
     openai.api_key = api_key if api_key else server
     fields = model.model_fields
@@ -46,5 +46,5 @@ JSON Structured Output:
     except:
         print(response)
         print("Failed to convert the response to the model, trying again.")
-        return await convertanything(input_string=input_string, model=model)
+        return convertanything(input_string=input_string, model=model)
 
