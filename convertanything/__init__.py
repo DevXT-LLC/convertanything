@@ -26,19 +26,18 @@ JSON Structured Output:
     response = ""
     if llm.startswith("gpt"):
         prompt = f"{system_message}\n{prompt}"
-    completion = openai.completions.create(
+    completion = openai.chat.completions.create(
         model=llm,
-        prompt=prompt,
+        messages=[{"role": "user", "content": prompt}],
         temperature=0.3,
         max_tokens=1024,
         top_p=0.95,
-        n=1,
         stream=False,
         extra_body={
             "system_message": system_message,
         },
     )
-    response = completion.choices[0].text
+    response = completion.messages[1]["content"]
     response = str(response).split("```json")[1].split("```")[0].strip()
     try:
         response = json.loads(response)
