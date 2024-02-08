@@ -1,6 +1,6 @@
 # convertanything
 
-`convertanything` is a simple way to convert any unstructured texts into pydantic models in Python with the use of language models. See the [examples notebook](examples.ipynb) for more details.
+`convertanything` is a simple way to convert any unstructured texts into pydantic models in Python with the use of language models. See the [examples notebook](https://github.com/DevXT-LLC/convertanything/blob/main/example.ipynb) for more details.
 
 ## Installation
 
