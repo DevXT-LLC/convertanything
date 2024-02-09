@@ -3,7 +3,16 @@ from typing import Type
 import json
 import openai
 
-def convertanything(input_string: str, model: Type[BaseModel], api_key=None, server="https://api.openai.com", llm="gpt-3.5-turbo-16k"):
+
+def convertanything(
+    input_string: str,
+    model: Type[BaseModel],
+    api_key=None,
+    server="https://api.openai.com",
+    llm="gpt-3.5-turbo-16k",
+):
+    if not isinstance(input_string, str):
+        input_string = str(input_string)
     openai.base_url = f"{server}/v1/"
     openai.api_key = api_key if api_key else server
     fields = model.model_fields
@@ -46,4 +55,3 @@ JSON Structured Output:
         print(response)
         print("Failed to convert the response to the model, trying again.")
         return convertanything(input_string=input_string, model=model)
-
