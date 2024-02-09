@@ -67,7 +67,7 @@ jobs:
       - name: Clone repository and install package
         if: inputs.clone-repo
         run: |
-          git clone ${{ github.repository }} /tmp/repo
+          git clone https://github.com/${{ github.repository }} /tmp/repo
           cd /tmp/repo
           pip3 install .
 
