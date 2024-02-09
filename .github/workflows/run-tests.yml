@@ -2,9 +2,7 @@ name: Run tests
 
 on:
   push:
-    branches: [main]
-  release:
-    types: [published]
+    branches: ["*"]
   workflow_dispatch:
 
 jobs:
