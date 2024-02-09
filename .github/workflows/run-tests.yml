@@ -1,0 +1,17 @@
+name: Run tests
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  test-convertanything:
+    uses: josh-xt/AGiXT/.github/workflows/operation-test-with-jupyter.yml@main
+    with:
+      notebook: tests/tests.ipynb
+      image: ghcr.io/devxt-llc/ezlocalai:main
+      port: "8091"
+      additional-python-dependencies: requests convertanything pydantic
