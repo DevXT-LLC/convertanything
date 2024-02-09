@@ -12,6 +12,6 @@ jobs:
     uses: josh-xt/AGiXT/.github/workflows/operation-test-with-jupyter.yml@main
     with:
       notebook: tests/tests.ipynb
-      image: josh-xt/ezlocalai:main
+      image: joshxt/ezlocalai:main
       port: "8091"
       additional-python-dependencies: requests convertanything pydantic
