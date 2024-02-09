@@ -9,9 +9,10 @@ on:
 
 jobs:
   test-convertanything:
-    uses: josh-xt/AGiXT/.github/workflows/operation-test-with-jupyter.yml@main
+    uses: ./.github/workflows/operation-test-with-jupyter.yml
     with:
       notebook: tests/tests.ipynb
       image: joshxt/ezlocalai:main
       port: "8091"
-      additional-python-dependencies: requests convertanything pydantic
+      additional-python-dependencies: requests pydantic
+      clone-repo: true
