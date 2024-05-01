@@ -1,7 +1,8 @@
 from pydantic import BaseModel
-from typing import Type
+from typing import Type, get_args, get_origin, Union
 import json
 import openai
+from enum import Enum
 
 
 def convertanything(
@@ -14,8 +15,16 @@ def convertanything(
     input_string = str(input_string)
     openai.base_url = f"{server}/v1/"
     openai.api_key = api_key if api_key else server
-    fields = model.model_fields
-    field_descriptions = [f"{field}: {fields[field]}" for field in fields]
+    fields = model.__annotations__
+    field_descriptions = []
+    for field, field_type in fields.items():
+        description = f"{field}: {field_type}"
+        if get_origin(field_type) == Union:
+            field_type = get_args(field_type)[0]
+        if isinstance(field_type, type) and issubclass(field_type, Enum):
+            enum_values = ", ".join([f"{e.name} = {e.value}" for e in field_type])
+            description += f" (Enum values: {enum_values})"
+        field_descriptions.append(description)
     schema = "\n".join(field_descriptions)
     prompt = f"""Act as a JSON converter that converts any text into the desired JSON format based on the schema provided. Respond only with JSON in a properly formatted markdown code block, no explanations.
 **Reformat the following information into a structured format according to the schema provided:**
