@@ -10,7 +10,7 @@ with open(os.path.join(this_directory, "requirements.txt")) as f:
 
 setup(
     name="convertanything",
-    version="0.0.5",
+    version="0.0.6",
     description="convertanything is a Python package that allows you to convert any text into a structured format according to the schema provided.",
     long_description=long_description,
     long_description_content_type="text/markdown",

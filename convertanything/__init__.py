@@ -47,7 +47,10 @@ JSON Structured Output:
         },
     )
     response = completion.choices[0].message.content
-    response = str(response).split("```json")[1].split("```")[0].strip()
+    if "```json" in response:
+        response = response.split("```json")[1].split("```")[0].strip()
+    elif "```" in response:
+        response = response.split("```")[1].strip()
     try:
         response = json.loads(response)
         return model(**response)
