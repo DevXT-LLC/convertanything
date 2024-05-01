@@ -46,7 +46,7 @@ JSON Structured Output:
             "system_message": system_message,
         },
     )
-    response = completion.messages[1]["content"]
+    response = completion.choices[0].message.content
     response = str(response).split("```json")[1].split("```")[0].strip()
     try:
         response = json.loads(response)
