@@ -26,7 +26,7 @@ def convertanything(
             description += f" (Enum values: {enum_values})"
         field_descriptions.append(description)
     schema = "\n".join(field_descriptions)
-    prompt = f"""Act as a JSON converter that converts any text into the desired JSON format based on the schema provided. Respond only with JSON in a properly formatted markdown code block, no explanations.
+    prompt = f"""Act as a JSON converter that converts any text into the desired JSON format based on the schema provided. Respond only with JSON in a properly formatted markdown code block, no explanations. Make your best assumptions based on data to try to fill in information to match the schema provided.
 **Reformat the following information into a structured format according to the schema provided:**
 
 ## Information:
@@ -41,8 +41,8 @@ JSON Structured Output:
     completion = openai.chat.completions.create(
         model=llm,
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.3,
-        max_tokens=1024,
+        temperature=0.5,
+        max_tokens=4096,
         top_p=0.95,
         stream=False,
     )
