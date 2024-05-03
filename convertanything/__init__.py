@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Type, get_args, get_origin, Union
+from typing import Type, get_args, get_origin, Union, List
 import json
 import openai
 from enum import Enum
@@ -8,8 +8,8 @@ from enum import Enum
 def convertanything(
     input_string: str,
     model: Type[BaseModel],
-    api_key=None,
     server="https://api.openai.com",
+    api_key=None,
     llm="gpt-3.5-turbo-16k",
 ):
     input_string = str(input_string)
@@ -58,3 +58,33 @@ JSON Structured Output:
         print(response)
         print("Failed to convert the response to the model, trying again.")
         return convertanything(input_string=input_string, model=model)
+
+
+def remap_fields(converted_data: dict, data: List[dict]) -> List[dict]:
+    mapped_list = []
+    for info in data:
+        new_data = {}
+        for key, value in converted_data.items():
+            item = [k for k, v in data[0].items() if v == value]
+            if item:
+                new_data[key] = info[item[0]]
+        mapped_list.append(new_data)
+    return mapped_list
+
+
+def convert_list_of_dicts(
+    data: List[dict],
+    model: Type[BaseModel],
+    server="https://api.openai.com",
+    api_key=None,
+    llm="gpt-3.5-turbo-16k",
+):
+    converted_data = convertanything(
+        input_string=json.dumps(data[0]),
+        model=model,
+        server=server,
+        api_key=api_key,
+        llm=llm,
+    )
+    mapped_list = remap_fields(converted_data=converted_data.model_dump(), data=data)
+    return mapped_list
