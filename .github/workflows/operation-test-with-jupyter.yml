@@ -45,6 +45,8 @@ jobs:
     services:
       service-under-test:
         image: ${{ inputs.image }}
+        env:
+          DEFAULT_MODEL: "MaziyarPanahi/Meta-Llama-3-8B-Instruct-GGUF"
         ports:
           - ${{ inputs.port-mapping || format('{0}:{1}', inputs.port, inputs.port) }}
 
