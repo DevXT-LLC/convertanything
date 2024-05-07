@@ -7,10 +7,8 @@ on:
 
 jobs:
   test-convertanything:
-    uses: ./.github/workflows/operation-test-with-jupyter.yml
+    uses: devxt-llc/ezlocalai/.github/workflows/test-with-ezlocalai.yml@main
     with:
-      notebook: tests/tests.ipynb
       image: joshxt/ezlocalai:main
-      port: "8091"
-      additional-python-dependencies: requests pydantic
+      additional-python-dependencies: pydantic
       clone-repo: true
