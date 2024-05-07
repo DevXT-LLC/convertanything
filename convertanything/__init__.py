@@ -21,6 +21,7 @@ def convertanything(
     api_key: str = None,
     llm: str = "gpt-3.5-turbo-16k",
     max_failures: int = 3,
+    response_type: str = None,
     **kwargs,
 ):
     input_string = str(input_string)
@@ -38,12 +39,13 @@ def convertanything(
         field_descriptions.append(description)
     schema = "\n".join(field_descriptions)
     prompt = f"""Act as a JSON converter that converts any text into the desired JSON format based on the schema provided. Respond only with JSON in a properly formatted markdown code block, no explanations. Make your best assumptions based on data to try to fill in information to match the schema provided.
-**Reformat the following information into a structured format according to the schema provided:**
+    **DO NOT ADD FIELDS TO THE MODEL OR CHANGE TYPES OF FIELDS, FOLLOW THE PYDANTIC SCHEMA!**
+    **Reformat the following information into a structured format according to the schema provided:**
 
 ## Information:
 {input_string}
 
-## Schema:
+## Pydantic Schema:
 {schema}
 
 JSON Structured Output:
@@ -73,7 +75,10 @@ JSON Structured Output:
         response = response.split("```")[1].strip()
     try:
         response = json.loads(response)
-        return model(**response)
+        if response_type == "json":
+            return response
+        else:
+            return model(**response)
     except Exception as e:
         if "failures" in kwargs:
             failures = int(kwargs["failures"]) + 1
