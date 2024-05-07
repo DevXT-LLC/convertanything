@@ -14,10 +14,6 @@ def convertanything(
     llm="gpt-3.5-turbo-16k",
     **kwargs,
 ):
-    if server.endswith("/"):
-        server = server[:-1]
-    if server.endswith("/v1"):
-        server = server[:-3]
     input_string = str(input_string)
     openai.base_url = f"{server}/v1/"
     openai.api_key = api_key if api_key else server
@@ -44,7 +40,7 @@ def convertanything(
 JSON Structured Output:
     """
     response = ""
-    messages = [{"role": "system", "content": prompt}]
+    messages = [{"role": "user", "content": prompt}]
     if "prompt_name" in kwargs:
         messages[0]["prompt_name"] = kwargs["prompt_name"]
         if "prompt_category" not in kwargs:
@@ -68,10 +64,18 @@ JSON Structured Output:
     try:
         response = json.loads(response)
         return model(**response)
-    except:
+    except Exception as e:
+        print(e)
         print(response)
         print("Failed to convert the response to the model, trying again.")
-        return convertanything(input_string=input_string, model=model)
+        return convertanything(
+            input_string=input_string,
+            model=model,
+            server=server,
+            api_key=api_key,
+            llm=llm,
+            **kwargs,
+        )
 
 
 def remap_fields(converted_data: dict, data: List[dict]) -> List[dict]:
