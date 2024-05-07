@@ -68,7 +68,6 @@ JSON Structured Output:
         user=str(uuid.uuid4()),
     )
     response = completion.choices[0].message.content
-    logging.info(f"Response: {response}")
     if "```json" in response:
         response = response.split("```json")[1].split("```")[0].strip()
     elif "```" in response:
