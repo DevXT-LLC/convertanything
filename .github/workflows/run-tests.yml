@@ -9,6 +9,5 @@ jobs:
   test-convertanything:
     uses: ./.github/workflows/test-with-ezlocalai.yml
     with:
-      image: joshxt/ezlocalai:main
       additional-python-dependencies: pydantic
       clone-repo: true
