@@ -1,17 +1,26 @@
+from enum import Enum
 from pydantic import BaseModel
 from typing import Type, get_args, get_origin, Union, List
 import json
 import openai
 import uuid
-from enum import Enum
+import logging
+import os
+
+
+logging.basicConfig(
+    level=os.environ.get("LOGLEVEL", "INFO"),
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
 
 
 def convertanything(
     input_string: str,
     model: Type[BaseModel],
-    server="https://api.openai.com",
-    api_key=None,
-    llm="gpt-3.5-turbo-16k",
+    server: str = "https://api.openai.com",
+    api_key: str = None,
+    llm: str = "gpt-3.5-turbo-16k",
+    max_failures: int = 3,
     **kwargs,
 ):
     input_string = str(input_string)
@@ -65,15 +74,30 @@ JSON Structured Output:
         response = json.loads(response)
         return model(**response)
     except Exception as e:
-        print(e)
-        print(response)
-        print("Failed to convert the response to the model, trying again.")
+        if "failures" in kwargs:
+            failures = int(kwargs["failures"]) + 1
+            if failures > max_failures:
+                logging.error(
+                    f"Error: {e} . Failed to convert the response to the model after 3 attempts. Response: {response}"
+                )
+                return (
+                    response
+                    if response
+                    else "Failed to convert the response to the model."
+                )
+        else:
+            failures = 1
+        logging.warning(
+            f"Error: {e} . Failed to convert the response to the model, trying again. {failures}/3 failures. Response: {response}"
+        )
         return convertanything(
             input_string=input_string,
             model=model,
             server=server,
             api_key=api_key,
             llm=llm,
+            max_failures=max_failures,
+            failures=failures,
             **kwargs,
         )
 
