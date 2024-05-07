@@ -6,7 +6,7 @@ on:
         type: string
         required: true
         description: file to run (ending in .ipynb), can be directory to batch run (without trailing slash)
-        default: "tests.ipynb"
+        default: tests.ipynb
       image:
         type: string
         required: true
