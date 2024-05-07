@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-convertanything:
-    uses: ./.github/workflows/test-with-ezlocalai.yml
+    uses: devxt-llc/ezlocalai/.github/workflows/test-with-ezlocalai.yml@main
     with:
       additional-python-dependencies: pydantic
       clone-repo: true
